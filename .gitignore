@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Model checkpoints & large binary files (Never commit weights to Git!)
+*.safetensors
+*.bin
+*.pt
+*.pth
+model_weights/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
