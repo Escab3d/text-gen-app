@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 
 st.set_page_config(
-    page_title="Text Generation Studio",
-    page_icon="🤖",
+    page_title="AI Text Studio",
+    page_icon="🚀",
     layout="wide"
 )
 
@@ -32,7 +32,7 @@ top_p = st.sidebar.slider("Top-p (Nucleus)", min_value=0.1, max_value=1.0, value
 repetition_penalty = st.sidebar.slider("Repetition Penalty", min_value=1.0, max_value=2.0, value=1.2, step=0.05)
 
 # Main UI
-st.title("🤖 Text Generation Playground")
+st.title("🚀 AI Text Studio")
 st.markdown("Interact directly with the fine-tuned text generation model served via FastAPI.")
 
 prompt = st.text_area(
