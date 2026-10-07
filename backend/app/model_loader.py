@@ -22,13 +22,26 @@ class ModelService:
         
         # Load model with float16 if on GPU to save memory, else float32 on CPU
         torch_dtype = torch.float16 if self.device == "cuda" else torch.float32
+        attn_impl = "sdpa" if self.device == "cuda" else "eager"
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_path,
-            torch_dtype=torch_dtype,
+            dtype=torch_dtype,
+            attn_implementation=attn_impl,
             low_cpu_mem_usage=True
         )
         self.model.to(self.device)
         self.model.eval()
+
+        # Warmup GPU kernels so first user request doesn't suffer JIT compile lag
+        if self.device == "cuda":
+            print("[INFO] Warming up CUDA kernels...")
+            try:
+                dummy_input = torch.tensor([[self.tokenizer.bos_token_id or 0]], device=self.device)
+                with torch.inference_mode():
+                    self.model.generate(dummy_input, max_new_tokens=2, pad_token_id=self.tokenizer.eos_token_id)
+            except Exception as e:
+                print(f"[WARNING] Warmup skipped: {e}")
+
         print("[INFO] Model loaded successfully.")
         return True
 
@@ -76,7 +89,7 @@ class ModelService:
         pad_token_id = self.tokenizer.pad_token_id if self.tokenizer.pad_token_id is not None else self.tokenizer.eos_token_id
 
         # Generate tokens
-        with torch.no_grad():
+        with torch.inference_mode():
             outputs = self.model.generate(
                 **inputs,
                 max_new_tokens=max_new_tokens,
