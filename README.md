@@ -138,3 +138,21 @@ streamlit run app.py
 * **Model Lifetime Management:** Models are loaded into memory once on server startup using FastAPI's `lifespan` context manager, preventing multi-second reloading overhead on every request.
 * **Precision Handling:** Uses `torch.float16` when CUDA is available to halve memory consumption and accelerate matrix multiplication, falling back gracefully to `torch.float32` on CPU.
 * **Separation of Concerns:** Model loading and PyTorch tensors are strictly decoupled from API routing logic, making it straightforward to swap models or add batching in the future.
+
+---
+
+## 📜 Citation & Acknowledgements
+
+If you use or build upon the underlying Hungarian language model weights, please cite the original work:
+
+```bibtex
+@inproceedings {yang-puli,
+    title = {Jönnek a nagyok! BERT-Large, GPT-2 és GPT-3 nyelvmodellek magyar nyelvre},
+    booktitle = {XIX. Magyar Számítógépes Nyelvészeti Konferencia (MSZNY 2023)},
+    year = {2023},
+    publisher = {Szegedi Tudományegyetem, Informatikai Intézet},
+    address = {Szeged, Hungary},
+    author = {Yang, Zijian Győző and Dodé, Réka and Ferenczi, Gergő and Héja, Enikő and Jelencsik-Mátyus, Kinga and Kőrös, Ádám and Laki, László János and Ligeti-Nagy, Noémi and Vadász, Noémi and Váradi, Tamás},
+    pages = {247--262}
+}
+```
